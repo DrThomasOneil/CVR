@@ -1,0 +1,14 @@
+Package: scrnaCVR
+Type: Package
+Title: helps with RNA analysis for the CVR group
+Version: 0.1.0
+Author: T.R.O
+Maintainer: The package maintainer <tomoneil58@live.com>
+Description: This package contains the functions specific to CVR's bulk an single cell RNA analysis
+License: for free use
+Encoding: UTF-8
+LazyData: true
+Imports: 
+	Seurat,
+	dplyr
+	
