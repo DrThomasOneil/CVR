@@ -61,19 +61,23 @@ proportions <- function(data, ident.1, ident.2, position) {
     Proportion")+ theme_classic()
 }
 
-process <- function(dat=dat, dimuse = 1:15, features=800, verbose=F, reduction.name=NULL){
+process <- function(dat=dat, umap=T, tsne=F, dimuse = 1:30, features=2000, verbose=F, reduction.name=NULL){
   dat <- NormalizeData(dat, verbose=verbose)
   dat <- FindVariableFeatures(dat, nfeatures=features, verbose=verbose)
   dat <- ScaleData(dat, features=VariableFeatures(dat), verbose=verbose)
   dat <- RunPCA(dat, verbose=verbose, reduction.name = paste0("pca", reduction.name))
-  #dat <- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0("pca", reduction.name), reduction.name = paste0("umap", reduction.name))
-  #dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
+  if(umap) {
+    dat <- RunUMAP(dat, dims=dimuse, verbose=verbose, reduction = paste0("pca", reduction.name), reduction.name = paste0("umap", reduction.name))
+  }
+  if(tsne){
+     dat <- RunTSNE(dat, dims=dimuse, check_duplicates=F, verbose=verbose, reduction = paste0("pca", reduction.name),reduction.name = paste0("tsne", reduction.name))
+  } 
   return(dat)
 }
 
 source("https://raw.githubusercontent.com/tomoneil58/LabCode/main/HPA/HPA.R")
 
-predictionHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name="predictedID", var.feat="") {
+predictHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, crow=T,ccol=T, return.plot=F, return.seurat=F, col.name="predictedID", var.feat="") {
   if(length(var.feat)==1) {
     predictions <- TransferData(
       anchorset = FindTransferAnchors(reference = ref, query = query, features=VariableFeatures(ref)),
