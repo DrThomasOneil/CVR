@@ -146,8 +146,8 @@ predictHeat <- function(ref, query, refID = "ident", queryID = "ident", norm=F, 
 
 }
 
-topm <- function(data, min.diff.pct = 0.01, n=40) {
-  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct) %>%
+topm <- function(data, min.diff.pct = 0.01, n=40, logfc = 0.1) {
+  FindAllMarkers(data, only.pos=T, min.diff.pct = min.diff.pct, logfc.threshold = logfc) %>%
     filter(p_val_adj <0.0001) %>%
     group_by(cluster) %>%
     top_n(n=n, wt = avg_log2FC)
